@@ -21,7 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -32,6 +35,18 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    // Relacija: Korisnik može imati više rezervacija
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'user_id');
+    }
+
+    // Relacija: Šminker može imati više rezervacija
+    public function makeupReservations()
+    {
+        return $this->hasMany(Reservation::class, 'makeup_artist_id');
+    }
 
     /**
      * The attributes that should be cast.
