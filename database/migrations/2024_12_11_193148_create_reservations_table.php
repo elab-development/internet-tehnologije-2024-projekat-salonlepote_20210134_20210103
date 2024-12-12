@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade'); // Usluga
             $table->date('date');
             $table->time('time');
-            $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
+            
             $table->timestamps();
         });
     }
