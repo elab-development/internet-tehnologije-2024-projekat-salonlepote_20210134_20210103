@@ -36,3 +36,4 @@ Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancelR
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
