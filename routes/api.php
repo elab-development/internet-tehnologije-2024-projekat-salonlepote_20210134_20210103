@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,9 @@ Route::get('/reservations/date/{date}', [ReservationController::class, 'reservat
 
 // 3. Custom ruta - otkazivanje rezervacije
 Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancelReservation']);
+
+Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLink']);
+Route::post('/password/reset', [ForgotPasswordController::class, 'resetPassword']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
