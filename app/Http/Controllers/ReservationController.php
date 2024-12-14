@@ -2,28 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+
 
 class ReservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-     // Resource metoda - vraća sve rezervacije
-     public function index()
+    // Resource metoda - vraća sve rezervacije
+    public function index()
     {
-        return response()->json(Reservation::all(), Response::HTTP_OK);
+        // Uzimanje parametara za filtriranje iz requesta
+        $status = $request->query('status'); // npr. 'confirmed', 'pending'
+        $date = $request->query('date');     // npr. '2024-06-01'
+
+        // Kreiranje query-ja sa filtriranjem
+        $query = Reservation::query();
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        // Primena paginacije (default: 10 po strani)
+        $perPage = $request->query('per_page', 10); // korisnik može definisati broj po strani
+        $reservations = $query->paginate($perPage);
+
+        // Vraćanje rezultata u JSON formatu
+        return response()->json([
+            'success' => true,
+            'data' => $reservations
+        ], 200);
+    
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-     // Resource metoda - kreira novu rezervaciju
+    // Resource metoda - kreira novu rezervaciju
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -38,12 +55,6 @@ class ReservationController extends Controller
         return response()->json($reservation, Response::HTTP_CREATED);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     // Resource metoda - vraća jednu rezervaciju
     public function show($id)
     {
@@ -56,92 +67,25 @@ class ReservationController extends Controller
         return response()->json($reservation, Response::HTTP_OK);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    //Ažurira postojeću rezervaciju
-    public function update(Request $request, $id)
+    // Custom metoda - pretraga rezervacija po datumu
+    public function reservationsByDate($date)
     {
-          // Pronalaženje rezervacije po ID-ju
-          $reservation = Reservation::find($id);
+        $reservations = Reservation::where('date', $date)->get();
 
-          if (!$reservation) {
-              return response()->json([
-                  'success' => false,
-                  'message' => 'Reservation not found.'
-              ], 404);
-          }
-  
-          // Validacija podataka
-          $validated = $request->validate([
-              'date' => 'required|date',
-              'time' => 'required',
-              'service_id' => 'required|exists:services,id',
-              'status' => 'required|in:pending,confirmed,cancelled'
-          ]);
-  
-          // Ažuriranje rezervacije
-          $reservation->update($validated);
-  
-          return response()->json([
-              'success' => true,
-              'message' => 'Reservation updated successfully.',
-              'data' => $reservation
-          ], 200);
+        return response()->json($reservations, Response::HTTP_OK);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    //Briše rezervaciju
-    public function destroy($id)
+    // Custom metoda - otkazivanje rezervacije
+    public function cancelReservation($id)
     {
-        // Pronalaženje rezervacije po ID-ju
         $reservation = Reservation::find($id);
 
         if (!$reservation) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Reservation not found.'
-            ], 404);
+            return response()->json(['error' => 'Reservation not found'], Response::HTTP_NOT_FOUND);
         }
 
-        // Brisanje rezervacije
-        $reservation->delete();
+        $reservation->update(['status' => 'cancelled']);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Reservation deleted successfully.'
-        ], 200);
-    
+        return response()->json(['message' => 'Reservation cancelled successfully'], Response::HTTP_OK);
     }
-
-     // Custom metoda - pretraga rezervacija po datumu
-     public function reservationsByDate($date)
-     {
-         $reservations = Reservation::where('date', $date)->get();
- 
-         return response()->json($reservations, Response::HTTP_OK);
-     }
- 
-     // Custom metoda - otkazivanje rezervacije
-     public function cancelReservation($id)
-     {
-         $reservation = Reservation::find($id);
- 
-         if (!$reservation) {
-             return response()->json(['error' => 'Reservation not found'], Response::HTTP_NOT_FOUND);
-         }
- 
-         $reservation->update(['status' => 'cancelled']);
- 
-         return response()->json(['message' => 'Reservation cancelled successfully'], Response::HTTP_OK);
-     }
 }
