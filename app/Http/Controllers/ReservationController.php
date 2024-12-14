@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Controllers\ReservationController;
+
 
 
 
@@ -87,5 +89,49 @@ class ReservationController extends Controller
         $reservation->update(['status' => 'cancelled']);
 
         return response()->json(['message' => 'Reservation cancelled successfully'], Response::HTTP_OK);
+    }
+    public function search(Request $request)
+    {
+        // Dohvati query parametre iz requesta
+        $status = $request->query('status');         // Filtriranje po statusu
+        $userName = $request->query('user_name');    // Filtriranje po imenu korisnika
+        $phone = $request->query('phone');           // Filtriranje po broju telefona
+        $date = $request->query('date');             // Filtriranje po datumu
+
+        // Kreiranje query-ja
+        $query = Reservation::query();
+
+        // Filtriranje po statusu
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        // Filtriranje po imenu korisnika (povezivanje sa User modelom)
+        if ($userName) {
+            $query->whereHas('user', function ($q) use ($userName) {
+                $q->where('name', 'like', "%{$userName}%");
+            });
+        }
+
+        // Filtriranje po broju telefona
+        if ($phone) {
+            $query->whereHas('user', function ($q) use ($phone) {
+                $q->where('phone', 'like', "%{$phone}%");
+            });
+        }
+
+        // Filtriranje po datumu rezervacije
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        // Dohvati rezultate
+        $results = $query->get();
+
+        // Vrati podatke u JSON formatu
+        return response()->json([
+            'success' => true,
+            'data' => $results
+        ], 200);
     }
 }
