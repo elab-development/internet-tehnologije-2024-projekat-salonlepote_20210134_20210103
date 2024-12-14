@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+//ruta za potvrdu rezervacija, slanje mejlova
+Route::get('/confirm-reservation/{reservationId}', [ReservationController::class, 'confirmReservation']);

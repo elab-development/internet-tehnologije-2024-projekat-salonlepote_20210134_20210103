@@ -6,7 +6,8 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\ReservationController;
-
+use App\Mail\ReservationConfirmation;
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -133,5 +134,28 @@ class ReservationController extends Controller
             'success' => true,
             'data' => $results
         ], 200);
+    }
+
+
+
+    //Slanje mejlova
+    public function confirmReservation($reservationId)
+    {
+        // Pronađi rezervaciju u bazi
+        $reservation = Reservation::find($reservationId);
+
+        if (!$reservation) {
+            return response()->json(['message' => 'Reservation not found'], 404);
+        }
+
+        // Oznaci rezervaciju kao potvrđenu
+        $reservation->status = 'confirmed';
+        $reservation->save();
+
+        // Poslati potvrdu na email korisniku
+        $user = $reservation->user;  // Pretpostavljamo da postoji veza sa korisnikom
+        Mail::to($user->email)->send(new ReservationConfirmation($user));
+
+        return response()->json(['message' => 'Reservation confirmed and email sent']);
     }
 }
