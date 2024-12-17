@@ -43,20 +43,21 @@ class ReservationController extends Controller
     
     }
 
-    // Resource metoda - kreira novu rezervaciju
+    // Resource metoda - kreira novu rezervaciju + Sprecavanje istovremene rezervacije (napredno upravljanje rezervacijama)
     public function store(Request $request)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'service_id' => 'required|exists:services,id',
-            'date' => 'required|date',
-            'time' => 'required',
+            'date' => 'required|date',// Validacija za datum
+            'time' => 'required',  // Validacija za vreme (HH:mm:ss)
             'user_id' => 'required|exists:users,id',
         ]);
     
-        // Proveri da li termin već postoji
+        // Provera da li postoji rezervacija za isti datum i vreme
         $exists = Reservation::where('date', $validated['date'])
                              ->where('time', $validated['time'])
+                             ->where('status', '!=', 'canceled') // Opcionalno: dozvoli otkazane termine
                              ->exists();
     
         if ($exists) {
@@ -175,40 +176,5 @@ class ReservationController extends Controller
         return response()->json(['message' => 'Reservation confirmed and email sent']);
     }
 
-    //Sprecavanje istovremene rezervacije (napredno upravljanje rezervacijama)
-    public function makeReservation(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'date' => 'required|date|after_or_equal:today', // Validacija za datum
-            'time' => 'required|date_format:H:i:s',         // Validacija za vreme (HH:mm:ss)
-        ]);
-
-        $userId = $request->input('user_id');
-        $date = $request->input('date'); // npr. '2024-12-20'
-        $time = $request->input('time'); // npr. '14:30:00'
-
-        // Provera da li postoji rezervacija za isti datum i vreme
-        $exists = Reservation::where('date', $date)
-                             ->where('time', $time)
-                             ->where('status', '!=', 'canceled') // Opcionalno: dozvoli otkazane termine
-                             ->exists();
-
-        if ($exists) {
-            return response()->json(['message' => 'Reservation time is already taken.'], 409);
-        }
-
-        // Kreiraj rezervaciju
-        $reservation = Reservation::create([
-            'user_id' => $userId,
-            'date' => $date,
-            'time' => $time,
-            'status' => 'confirmed',
-        ]);
-
-        return response()->json([
-            'message' => 'Reservation successful!',
-            'reservation' => $reservation
-        ], 201);
-    }
+    
 }
