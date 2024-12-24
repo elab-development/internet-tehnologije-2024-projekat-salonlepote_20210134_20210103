@@ -18,11 +18,14 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    //Polja koja su fillable mogu se masovno popunjavati 
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'email_verified_at',
+        'remember_token',
     ];
 
 

@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Str; // Neophodno za remember_token
 class AuthController extends Controller
 {
     /**
@@ -28,22 +28,19 @@ class AuthController extends Controller
             ], 400);
         }
 
-        $user = User::create([
+        //masovno popunjavanje (create prosledjuje i upisuje u bazu samo polja navedena u $fillable)
+       $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-           
+            'email_verified_at' => now(), // Popunjava trenutnim vremenom
+            'remember_token' => Str::random(10), // Generiše random string
         ]);
+
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'user' => $user,
-                'token' => $token,
-            ],
-        ], 201);
+        return response()->json($user, 201);
     }
 
     /**
