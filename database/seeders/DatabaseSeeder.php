@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        $services = Service::factory(5)->create();
         $users = User::factory(10)->create();
+        $services = Service::factory(5)->create();
         $reservation = Reservation::factory(3)->create();
     }
 }
