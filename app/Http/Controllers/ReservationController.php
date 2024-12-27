@@ -75,6 +75,8 @@ class ReservationController extends Controller
         return response()->json(['message' => 'Rezervacija je uspešno kreirana.']);
     }
 
+    
+
     // Resource metoda - vraća jednu rezervaciju
     public function show($id)
     {
@@ -130,6 +132,7 @@ class ReservationController extends Controller
                 $q->where('name', 'like', "%{$userName}%");
             });
         }
+    
 
         // Filtriranje po broju telefona
         if ($phone) {
@@ -152,6 +155,38 @@ class ReservationController extends Controller
             'data' => $results
         ], 200);
     }
+
+     // Ažuriraj rezervaciju (PUT/PATCH)
+     public function update(Request $request, $id)
+     {
+         $reservation = Reservation::find($id);
+         if (!$reservation) {
+             return response()->json(['error' => 'Reservation not found'], 404);
+         }
+ 
+         $validatedData = $request->validate([
+             'user_id' => 'sometimes|exists:users,id',
+             'service_id' => 'sometimes|exists:services,id',
+             'date' => 'sometimes|date',
+             'time' => 'sometimes',
+             'status' => 'sometimes|string'
+         ]);
+ 
+         $reservation->update($validatedData);
+         return response()->json(['message' => 'Reservation updated successfully', 'reservation' => $reservation], 200);
+     }
+ 
+     // Obriši rezervaciju (DELETE)
+     public function destroy($id)
+     {
+         $reservation = Reservation::find($id);
+         if (!$reservation) {
+             return response()->json(['error' => 'Reservation not found'], 404);
+         }
+ 
+         $reservation->delete();
+         return response()->json(['message' => 'Reservation deleted successfully'], 200);
+     }
 
 
 
