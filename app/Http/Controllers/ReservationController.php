@@ -51,7 +51,7 @@ class ReservationController extends Controller
             'service_id' => 'required|exists:services,id',
             'date' => 'required|date',// Validacija za datum
             'time' => 'required',  // Validacija za vreme (HH:mm:ss)
-            'user_id' => 'required|exists:users,id',
+            
         ]);
     
         // Provera da li postoji rezervacija za isti datum i vreme
@@ -106,9 +106,9 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Reservation not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $reservation->update(['status' => 'cancelled']);
+        $reservation->update(['status' => 'canceled']);
 
-        return response()->json(['message' => 'Reservation cancelled successfully'], Response::HTTP_OK);
+        return response()->json(['message' => 'Reservation canceled successfully'], Response::HTTP_OK);
     }
     public function search(Request $request)
     {
