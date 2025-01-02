@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 class ReservationController extends Controller
 {
     // Resource metoda - vraća sve rezervacije
-    public function index()
+    public function index(Request $request)
     {
         // Uzimanje parametara za filtriranje iz requesta
         $status = $request->query('status'); // npr. 'confirmed', 'pending'
@@ -210,6 +210,8 @@ class ReservationController extends Controller
 
         return response()->json(['message' => 'Reservation confirmed and email sent']);
     }
+
+
 
     
 }

@@ -27,6 +27,9 @@ Route::apiResource('reservations', ReservationController::class);
 // 2. Obična GET ruta - vraća sve šminkere
 Route::get('/makeup-artists', [UserController::class, 'makeupArtists']);
 
+//3.1
+Route::post('/reservations', [ReservationController::class, 'store']);
+
 // 3. Ruta sa parametrom - pretraga rezervacija po datumu
 Route::get('/reservations/date/{date}', [ReservationController::class, 'reservationsByDate']);
 
