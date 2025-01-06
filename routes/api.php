@@ -42,8 +42,11 @@ Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLink
 Route::post('/password/reset', [ForgotPasswordController::class, 'resetPassword']);
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Rute za manipulaciju bazom koje su zaštićene middleware-om 'auth'
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/reservations', [ReservationController::class, 'store']); // Kreiranje rezervacije
+    Route::put('/reservations/{id}', [ReservationController::class, 'update']); // Ažuriranje rezervacije
+    Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']); // Brisanje rezervacije
 });
 
 //Register, login, logout
