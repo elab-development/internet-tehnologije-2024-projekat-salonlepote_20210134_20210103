@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -79,10 +80,15 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted successfully'], Response::HTTP_OK);
     }
+
     public function makeupArtists()
-{
-    $artists = User::where('role', 'makeup_artist')->get();
-    return response()->json($artists, Response::HTTP_OK);
-}
+    {
+        $artists = User::where('role', 'makeup_artist')->get();
+        // return response()->json($artists, Response::HTTP_OK);
+        return UserResource::collection($artists)
+            ->additional(['success' => true])
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
+    }
 
 }

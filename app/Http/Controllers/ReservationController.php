@@ -8,8 +8,10 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\ReservationController;
 use App\Mail\ReservationConfirmation;
 use Illuminate\Support\Facades\Mail;
-
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ReservationResource;
+use App\Http\Resources\ReservationCollection;
 
 class ReservationController extends Controller
 {
@@ -34,26 +36,36 @@ class ReservationController extends Controller
         // Primena paginacije (default: 10 po strani)
         $perPage = $request->query('per_page', 10); // korisnik može definisati broj po strani
         $reservations = $query->paginate($perPage);
-
-        // Vraćanje rezultata u JSON formatu
-        return response()->json([
+        
+        $reservations = Reservation::all();
+        return ReservationResource::collection($reservations)
+        ->additional([
             'success' => true,
-            'data' => $reservations
-        ], 200);
-    
+            'message' => 'Reservations retrieved successfully.',
+        ]);
     }
 
     // Resource metoda - kreira novu rezervaciju + Sprecavanje istovremene rezervacije (napredno upravljanje rezervacijama)
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
             'service_id' => 'required|exists:services,id',
+            'makeup_artist_id' => 'required|exists:users,id',
             'date' => 'required|date',// Validacija za datum
             'time' => 'required',  // Validacija za vreme (HH:mm:ss)
-            
+
         ]);
-    
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $validated = $validator->validated();
+
         // Provera da li postoji rezervacija za isti datum i vreme
         $exists = Reservation::where('date', $validated['date'])
                              ->where('time', $validated['time'])
@@ -65,14 +77,20 @@ class ReservationController extends Controller
         }
     
         // Kreiraj rezervaciju
-        Reservation::create([
+        $reservation = Reservation::create([
             'user_id' => $validated['user_id'],
+            'service_id' => $validated['service_id'],
+            'makeup_artist_id' => $validated['makeup_artist_id'],
             'date' => $validated['date'],
             'time' => $validated['time'],
-            'status' => 'confirmed'
+            'status' => 'pending'
         ]);
-    
-        return response()->json(['message' => 'Rezervacija je uspešno kreirana.']);
+
+        // Korišćenje ReservationResource za formatiranje odgovora
+         return (new ReservationResource($reservation))
+                ->additional(['message' => 'Rezervacija je uspešno kreirana.'])
+                ->response()
+                ->setStatusCode(201);
     }
 
     
@@ -80,21 +98,26 @@ class ReservationController extends Controller
     // Resource metoda - vraća jednu rezervaciju
     public function show($id)
     {
+        // Pronađi rezervaciju prema ID-ju
         $reservation = Reservation::find($id);
-
+        
+        //Ako trazena rezervacija ne postoji u bazi, prosledjuje se poruka 'Reservation not found'
         if (!$reservation) {
             return response()->json(['error' => 'Reservation not found'], Response::HTTP_NOT_FOUND);
         }
 
-        return response()->json($reservation, Response::HTTP_OK);
+        return new ReservationResource($reservation);
     }
 
     // Custom metoda - pretraga rezervacija po datumu
     public function reservationsByDate($date)
     {
         $reservations = Reservation::where('date', $date)->get();
-
-        return response()->json($reservations, Response::HTTP_OK);
+        // Provera da li je kolekcija prazna
+        if ($reservations->isEmpty()) {
+            return response()->json(['error' => 'Reservations not found for the given date'], Response::HTTP_NOT_FOUND);
+        }
+        return response()->json(new ReservationCollection($reservations), Response::HTTP_OK);
     }
 
     // Custom metoda - otkazivanje rezervacije
@@ -105,7 +128,7 @@ class ReservationController extends Controller
         if (!$reservation) {
             return response()->json(['error' => 'Reservation not found'], Response::HTTP_NOT_FOUND);
         }
-
+    
         $reservation->update(['status' => 'canceled']);
 
         return response()->json(['message' => 'Reservation canceled successfully'], Response::HTTP_OK);
@@ -164,16 +187,22 @@ class ReservationController extends Controller
              return response()->json(['error' => 'Reservation not found'], 404);
          }
  
-         $validatedData = $request->validate([
-             'user_id' => 'sometimes|exists:users,id',
-             'service_id' => 'sometimes|exists:services,id',
-             'date' => 'sometimes|date',
-             'time' => 'sometimes',
-             'status' => 'sometimes|string'
-         ]);
- 
-         $reservation->update($validatedData);
-         return response()->json(['message' => 'Reservation updated successfully', 'reservation' => $reservation], 200);
+         $validator = Validator::make($request->all(), [
+            'user_id' => 'sometimes|exists:users,id',
+            'service_id' => 'sometimes|exists:services,id',
+            'date' => 'sometimes|date',
+            'time' => 'sometimes',
+            'status' => 'sometimes|string'
+        ]);
+    
+        // Provera validacije
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        // Ažuriranje rezervacije validiranim podacima
+        $reservation->update($validator->validated());
+         return response()->json(['message' => 'Reservation updated successfully', 'reservation' => new ReservationResource($reservation)], 200);
      }
  
      // Obriši rezervaciju (DELETE)

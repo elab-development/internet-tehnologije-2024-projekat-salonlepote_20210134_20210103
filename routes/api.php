@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,20 +17,11 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\UserController;
-
-
-Route::apiResource('reservations', ReservationController::class);
-
 // 1. Resource ruta za rezervacije
 Route::apiResource('reservations', ReservationController::class);
 
 // 2. Obična GET ruta - vraća sve šminkere
 Route::get('/makeup-artists', [UserController::class, 'makeupArtists']);
-
-//3.1
-Route::post('/reservations', [ReservationController::class, 'store']);
 
 // 3. Ruta sa parametrom - pretraga rezervacija po datumu
 Route::get('/reservations/date/{date}', [ReservationController::class, 'reservationsByDate']);
@@ -40,14 +33,6 @@ Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancelR
 Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLink']);
 // 6. Reset lozinke
 Route::post('/password/reset', [ForgotPasswordController::class, 'resetPassword']);
-
-
-// Rute za manipulaciju bazom koje su zaštićene middleware-om 'auth'
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/reservations', [ReservationController::class, 'store']); // Kreiranje rezervacije
-    Route::put('/reservations/{id}', [ReservationController::class, 'update']); // Ažuriranje rezervacije
-    Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']); // Brisanje rezervacije
-});
 
 //Register, login, logout
 Route::post('/register', [AuthController::class, 'register']);
