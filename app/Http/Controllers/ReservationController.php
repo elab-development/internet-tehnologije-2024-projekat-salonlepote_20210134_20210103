@@ -239,6 +239,13 @@ class ReservationController extends Controller
         return response()->json(['message' => 'Reservation confirmed and email sent']);
     }
 
+    // Konstruktor za kontroler. Koristimo middleware kako bismo osigurali
+    // da određene metode (store, update, destroy, cancelReservation) mogu
+    // koristiti samo autentifikovani korisnici.
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->only(['store', 'update', 'destroy', 'cancelReservation']);
+    }
 
 
     

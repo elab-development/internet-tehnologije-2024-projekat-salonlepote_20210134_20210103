@@ -17,8 +17,11 @@ use App\Http\Controllers\UserController;
 |
 */
 
-// 1. Resource ruta za rezervacije
-Route::apiResource('reservations', ReservationController::class);
+// 1. Resource ruta za upravljanje rezervacijama (CRUD operacije). 
+//Preko Sanctum middleware-a pristup je omogucen samo autentifikovanim korisnicima.
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('reservations', ReservationController::class);
+});
 
 // 2. Obična GET ruta - vraća sve šminkere
 Route::get('/makeup-artists', [UserController::class, 'makeupArtists']);
