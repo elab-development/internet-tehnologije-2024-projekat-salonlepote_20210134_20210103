@@ -37,7 +37,6 @@ class ReservationController extends Controller
         $perPage = $request->query('per_page', 10); // korisnik može definisati broj po strani
         $reservations = $query->paginate($perPage);
         
-        $reservations = Reservation::all();
         return ReservationResource::collection($reservations)
         ->additional([
             'success' => true,
