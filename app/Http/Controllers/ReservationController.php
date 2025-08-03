@@ -248,5 +248,50 @@ class ReservationController extends Controller
     }
 
 
+    // Za šminkera: samo svoje rezervacije
+    public function makeupArtistReservations(Request $request)
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
+
+        $reservations = Reservation::where('makeup_artist_id', $user->id)->get();
+        return response()->json(new ReservationCollection($reservations));
+    }
+
+    // Za klijente: samo svoje rezervacije
+    public function clientReservations(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not authenticated'], 401);
+        }
+
+        $reservations = Reservation::where('user_id', $user->id)->get();
+
+        return response()->json(new ReservationCollection($reservations));
+    }
     
+
+    // Za šminkere: menjanje statusa rezervacije
+    public function updateStatus(Request $request, $id)
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        // Provera da li šminker može menjati baš ovu rezervaciju
+        if ($reservation->makeup_artist_id !== $request->user()->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
+        $request->validate([
+            'status' => 'required|string|in:pending,confirmed,canceled',
+        ]);
+
+        $reservation->status = $request->status;
+        $reservation->save();
+
+        return response()->json(['message' => 'Status updated']);
+    }
 }

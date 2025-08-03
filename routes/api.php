@@ -17,10 +17,27 @@ use App\Http\Controllers\UserController;
 |
 */
 
-// 1. Resource ruta za upravljanje rezervacijama (CRUD operacije). 
+// 1. Rute za korisnike sa različitim ulogama. 
 //Preko Sanctum middleware-a pristup je omogucen samo autentifikovanim korisnicima.
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('reservations', ReservationController::class);
+//Preko RoleMiddleware-a proveravamo ulogu i vršimo kontrolu pristupa određenim rutama.
+
+// Rute za admina 
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::apiResource('reservations', ReservationController::class); //Resource ruta za upravljanje rezervacijama (CRUD operacije)
+    Route::apiResource('users', UserController::class)->except(['show']); // Resource ruta za upravljanje korisnicima (CRUD operacije)
+});
+
+// Rute za šminkere - vidi sve rezervacije koje treba da odradi i može da ažurira status rezervacije
+Route::middleware(['auth:sanctum', 'role:makeup_artist'])->group(function () {
+    Route::get('/makeup-artist/my-reservations', [ReservationController::class, 'makeupArtistReservations']);
+    Route::patch('/reservations/{id}/status', [ReservationController::class, 'updateStatus']);
+});
+
+// Rute za klijente - može da kreira rezervaciju, vidi svoje rezervacije i otkaže rezervaciju
+Route::middleware(['auth:sanctum', 'role:client'])->group(function () {
+    Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::get('/client/my-reservations', [ReservationController::class, 'clientReservations']);
+    Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancelReservation']);
 });
 
 // 2. Obična GET ruta - vraća sve šminkere
@@ -41,3 +58,5 @@ Route::post('/password/reset', [ForgotPasswordController::class, 'resetPassword'
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+
