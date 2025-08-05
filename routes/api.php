@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\GenderController;
 
 
 /*
@@ -64,3 +65,5 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 //Ruta za prikaz državnih praznika
 Route::get('/holidays/{year}', [HolidayController::class, 'getHolidays']);
+
+Route::get('/gender/{name}', [GenderController::class, 'detectGender']);
