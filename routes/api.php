@@ -6,6 +6,9 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HolidayController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -59,4 +62,5 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-
+//Ruta za prikaz državnih praznika
+Route::get('/holidays/{year}', [HolidayController::class, 'getHolidays']);
