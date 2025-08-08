@@ -11,6 +11,8 @@ import Register from "./pages/Register";
 import MakeupArtists from "./pages/makeupArtists";
 import ReservationForm from "./pages/ReservationForm";
 import NotFound from "./pages/NotFound"; // opcionalno
+import Gallery from './pages/Gallery';
+
 
 import './styles.css';
 
@@ -27,6 +29,8 @@ function App() {
         <Route path="/makeup-artists" element={<MakeupArtists />} />
         <Route path="/rezervisi" element={<ReservationForm />} />
         <Route path="*" element={<NotFound />} /> {/* opcionalno */}
+        <Route path="/" element={<Home />} />
+        <Route path="/galerija" element={<Gallery />} />
         </Routes>
       </div>
     </BrowserRouter>

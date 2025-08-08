@@ -16,6 +16,7 @@ function NavBar() {
         </div>
         <ul className="navbar-menu">
           <li><Link to="/">Početna</Link></li>
+          <li><Link to="/galerija">Galerija</Link></li>
           <li><Link to="/makeup-artists">Šminkeri</Link></li>
           <li><Link to="/rezervisi">Rezerviši</Link></li>
           <li><Link to="/login">Login</Link></li>
