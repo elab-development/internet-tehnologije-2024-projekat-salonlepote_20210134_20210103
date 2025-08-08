@@ -1,7 +1,7 @@
 :root {
   --svetlija-lila: #E6E0F8;
   --pastel-roze: #F9DDE1;
-  --zivlja-zelena: #adad33;
+  --zivlja-zelena: #00ba54;
   --jaca-plava: #06c988;
   --tamniji-lila: #d8c9f4;
   --text-color: #3B3B3B;
@@ -12,7 +12,7 @@ body {
   background-repeat: no-repeat;
   background-position: top right;
   background-size: 10%;
-  background-color: #e0c1ff; /* svetla lila */
+  background-color: #e0c1ff; 
 }
 
 .container {
