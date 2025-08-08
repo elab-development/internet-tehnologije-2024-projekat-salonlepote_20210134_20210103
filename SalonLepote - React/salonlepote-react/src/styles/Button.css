@@ -1,0 +1,36 @@
+.btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Glavni stil */
+.btn.primary {
+  background-color: #6a0dad;
+  color: white;
+}
+
+.btn.primary:hover {
+  background-color: #5a009e;
+}
+
+/* Sekundarni stil */
+.btn.secondary {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.btn.secondary:hover {
+  background-color: #e0e0e0;
+}
+
+/* Disabled stanje */
+.btn:disabled {
+  background-color: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}

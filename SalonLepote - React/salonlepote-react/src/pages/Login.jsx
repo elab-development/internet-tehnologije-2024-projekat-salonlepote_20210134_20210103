@@ -1,5 +1,11 @@
 import { useState } from "react";
 import axios from "../api/axios";
+import Input from "../components/Input";
+import Button from "../components/Button";
+
+const validateEmail = (email) => {
+    return /\S+@\S+\.\S+/.test(email);
+  };
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -17,10 +23,44 @@ function Login() {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Lozinka" />
-      <button type="submit">Prijavi se</button>
+     <form
+      onSubmit={handleLogin}
+      style={{
+        maxWidth: "400px",
+        margin: "80px auto",
+        padding: "24px",
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+        boxShadow: "0 4px 8px rgba(0,0,0,0.05)",
+        backgroundColor: "#fff",
+      }}
+    >
+      <h2 style={{ textAlign: "center", marginBottom: "24px" }}>Prijava</h2>
+
+      <Input
+        id="email"
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Unesite vaš email"
+        error={!validateEmail(email) && email ? "Neispravan email format" : ""}
+        required
+      />
+
+      <Input
+        id="password"
+        label="Lozinka"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Unesite lozinku"
+        error={password.length < 6 && password ? "Lozinka je prekratka" : ""}
+        required
+      />
+
+
+    <Button type="submit">Prijavi se</Button>
     </form>
   );
 }
