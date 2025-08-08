@@ -22,12 +22,20 @@ body {
   max-width: 700px;
   margin: 50px auto;
   box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+
 }
 
 h1 {
   color: var(--zivlja-zelena);
   text-align: center;
   font-weight: 700;
+}
+h2 {
+  color: var(--zivlja-zelena);
+  text-align: center;
+  font-weight: 500;
 }
 
 button {
@@ -44,4 +52,66 @@ button {
 
 button:hover {
   background-color: #155dbe; /* tamnija plava za hover */
+}
+
+.home-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  padding: 20px;
+  gap: 40px;
+
+}
+
+.home-container {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: center;
+  max-width: 1000px;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.home-text {
+  flex: 1;
+}
+
+
+
+.home-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.home-image img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.home-text h1 {
+  font-size: 2.2rem;
+  color: #7b4bb7;
+  margin-bottom: 16px;
+}
+
+.home-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 14px;
+}
+
+.home-text .cta {
+  font-weight: bold;
+  font-style: italic;
+  color: #db7093;
+  font-size: 1.3rem;
+  margin-top: 20px;
 }
