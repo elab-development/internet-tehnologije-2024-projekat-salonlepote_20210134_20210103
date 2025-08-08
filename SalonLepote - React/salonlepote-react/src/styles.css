@@ -10,9 +10,9 @@
 body {
   background-image: url("./assets/logo.png");
   background-repeat: no-repeat;
-  background-position: top right;
+  background-position: right;
   background-size: 10%;
-  background-color: #e0c1ff; 
+  background-color: #e0c1ff;
 }
 
 .container {

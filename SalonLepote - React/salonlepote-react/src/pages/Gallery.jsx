@@ -4,7 +4,7 @@ import img1 from '../assets/galerija1jpg.jpg';
 import img2 from '../assets/galerija2.jpg';
 import img3 from '../assets/galerija3.jpg';
 import img4 from '../assets/galerija4.jpg';
-import './Galerija.css';
+import "../styles/Galerija.css";
 
 
 const Galerija = () => {
@@ -20,11 +20,11 @@ const Galerija = () => {
   };
 
   return (
-    <div className="galerija-container">
+    <><h2>Galerija fotografija</h2><div className="galerija-container">
       <button onClick={prethodnaSlika} className="galerija-btn">❮</button>
       <img src={slike[trenutna]} alt="Galerija" className="galerija-slika" />
       <button onClick={sledecaSlika} className="galerija-btn">❯</button>
-    </div>
+    </div></>
   );
 };
 
