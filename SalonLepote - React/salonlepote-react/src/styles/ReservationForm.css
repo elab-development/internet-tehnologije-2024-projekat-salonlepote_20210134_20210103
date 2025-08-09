@@ -1,18 +1,19 @@
+
+
 .reservation-form {
   max-width: 400px;
   margin: 40px auto;
   padding: 25px;
-  background: #fff;
+  
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  background-image: url("../assets/makeupback.jpg"); /* putanja do slike */
+  background-size: cover;  /* popuni ceo prostor */
+  background-position: center; /* centriraj sliku */
 }
 
-.reservation-form h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-}
 
 .reservation-form label {
   display: block;

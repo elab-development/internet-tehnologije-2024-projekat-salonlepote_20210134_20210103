@@ -5,6 +5,7 @@ import sminker1 from '../assets/sminker1.jpg';
 import sminker2 from '../assets/sminker2.jpg';
 import sminker3 from '../assets/sminker3.jpg';
 import sminker4 from '../assets/sminker4.jpg';
+import Breadcrumbs from "../components/Breadcrumbs";
 
 const styles = {
   container: {
@@ -26,6 +27,16 @@ function MakeupArtists() {
   }, []);
 
   return (
+
+ <div style={{ marginBottom: "20px", textAlign: "left" }}>
+        <Breadcrumbs
+          paths={[
+            { name: "Početna", link: "/" },
+            { name: "Šminkeri", link: "/makeupArtists" },
+          ]}
+        />
+        
+
     <div>
       <h2>Naši šminkeri</h2>
       <ul>
@@ -43,6 +54,6 @@ function MakeupArtists() {
            </div>
       </ul>
     </div>
-  );
+  </div>);
 }
 export default MakeupArtists;

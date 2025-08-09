@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
 import "../styles/ReservationForm.css";
+import background from "../assets/makeupback.jpg";
 
 const ReservationForm = () => {
   const [services, setServices] = useState([]);
@@ -9,6 +10,8 @@ const ReservationForm = () => {
   const [selectedArtist, setSelectedArtist] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+
+  
 
   useEffect(() => {
   
@@ -40,7 +43,7 @@ const ReservationForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="reservation-form">
-      <h2 color="#009b43ff">Rezervacija</h2>
+      <h2 color="#009b43ff">Rezervacija šminkanja</h2>
 
 
       <label>Usluga:</label>
@@ -63,7 +66,7 @@ const ReservationForm = () => {
         ))}
       </select>
 
-      <label>Datum:</label>
+      <label >Datum:</label>
       <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
 
       <label>Vreme:</label>

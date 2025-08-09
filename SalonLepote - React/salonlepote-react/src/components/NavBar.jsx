@@ -26,8 +26,10 @@ function NavBar() {
         <ul className="navbar-menu">
           <li><Link to="/">Početna</Link></li>
           <li><Link to="/galerija">Galerija</Link></li>
+           <li><Link to="/treatments">Tretmani</Link></li>
           <li><Link to="/makeup-artists">Šminkeri</Link></li>
           <li><Link to="/rezervisi">Rezerviši</Link></li>
+    
 
            {/* Admin vidi dashboard */}
           {user?.role === "admin" && (

@@ -16,6 +16,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminLayout from './components/AdminLayout';
 import Reservations from "./pages/Reservations";
 import Users from "./pages/Users";
+import Treatments from "./pages/Treatments";
 
 import './styles.css';
 
@@ -37,6 +38,7 @@ function App() {
         <Route path="/admin-dashboard" element={ <AdminRoute> <AdminLayout><AdminDashboard /></AdminLayout></AdminRoute> }/>
         <Route path="/admin/reservations" element={ <AdminRoute> <AdminLayout><Reservations /></AdminLayout></AdminRoute> }/>
         <Route path="/admin/users" element={<AdminRoute> <AdminLayout> <Users /></AdminLayout></AdminRoute>}/>
+        <Route path="/treatments" element={<Treatments />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -5,6 +5,7 @@ import img2 from '../assets/galerija2.jpg';
 import img3 from '../assets/galerija3.jpg';
 import img4 from '../assets/galerija4.jpg';
 import "../styles/Galerija.css";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 
 const Galerija = () => {
@@ -20,11 +21,20 @@ const Galerija = () => {
   };
 
   return (
-    <><h2>Galerija fotografija</h2><div className="galerija-container">
+    <div style={{ marginBottom: "20px", textAlign: "left" }}>
+        <Breadcrumbs
+          paths={[
+            { name: "Početna", link: "/" },
+            { name: "Glaerija", link: "/gallery" },
+          ]}
+        />
+
+    
+    <h2>Galerija fotografija</h2><div className="galerija-container">
       <button onClick={prethodnaSlika} className="galerija-btn">❮</button>
       <img src={slike[trenutna]} alt="Galerija" className="galerija-slika" />
       <button onClick={sledecaSlika} className="galerija-btn">❯</button>
-    </div></>
+    </div></div>
   );
 };
 
