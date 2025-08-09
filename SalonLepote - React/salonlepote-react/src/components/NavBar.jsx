@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
 import "../styles/NavBar.css";
 import logoImage from "../assets/logo-bez-pozadine.png";
+import Button from "../components/Button";
 
 function NavBar() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/login"; // preusmeravanje na login
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -19,7 +28,31 @@ function NavBar() {
           <li><Link to="/galerija">Galerija</Link></li>
           <li><Link to="/makeup-artists">Šminkeri</Link></li>
           <li><Link to="/rezervisi">Rezerviši</Link></li>
-          <li><Link to="/login">Login</Link></li>
+
+           {/* Admin vidi dashboard */}
+          {user?.role === "admin" && (
+            <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
+          )}
+
+          {/* Makeup artist vidi svoje rezervacije */}
+          {user?.role === "makeup_artist" && (
+            <li><Link to="/my-reservations">Moje rezervacije</Link></li>
+          )}
+
+          {/* Client vidi svoje rezervacije */}
+          { user?.role === "client" && (
+            <li><Link to="/client-reservations">Moje rezervacije</Link></li>
+          )}
+
+          {/* Login / Logout dugme */}
+          {user ? (
+            <>
+              <li style={{ fontWeight: "bold" }}>{user.name} ({user.role})</li>
+              <li><Button onClick={handleLogout}>Logout</Button></li>
+            </>
+          ) : (
+            <li><Link to="/login">Login</Link></li>
+          )}
         </ul>
       </div>
     </nav>

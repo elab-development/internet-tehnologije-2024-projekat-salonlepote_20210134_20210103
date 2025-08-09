@@ -15,8 +15,15 @@ function Login() {
     e.preventDefault();
     try {
       const res = await axios.post("/login", { email, password });
-      localStorage.setItem("token", res.data.data.token);
+      // očekujemo da backend vrati token i user podatke
+      const token = res.data.data.token;
+      const user = res.data.data.user;
+    
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
       alert("Uspešna prijava");
+      window.location.href = "/"; // osvežavanje i preusmeravanje na početnu
     } catch (err) {
       alert("Greška pri prijavi");
     }
