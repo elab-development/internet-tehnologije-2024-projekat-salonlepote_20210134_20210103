@@ -1,135 +1,77 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "../api/axios";
-import "../styles/Form.css";
+import "../styles/ReservationForm.css";
 
-function ReservationForm() {
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [serviceId, setServiceId] = useState("");
-  const [makeupArtistId, setMakeupArtistId] = useState("");
-
+const ReservationForm = () => {
   const [services, setServices] = useState([]);
   const [makeupArtists, setMakeupArtists] = useState([]);
+  const [selectedService, setSelectedService] = useState("");
+  const [selectedArtist, setSelectedArtist] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
-  // Učitaj usluge i makeup artista na učitavanje komponente
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
+  
+    setServices([
+      { id: 1, name: "Dnevna šminka" },
+      { id: 2, name: "Svečana šminka" },
+      { id: 3, name: "Venčana šminka" },
+      { id: 4, name: "Profesionalno konturisanje" }
+    ]);
 
-        // Pretpostavimo da API endpointi postoje ovako:
-        const servicesRes = await axios.get("/services", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setServices(servicesRes.data);
-
-        const artistsRes = await axios.get("/makeup-artists", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setMakeupArtists(artistsRes.data);
-      } catch (error) {
-        alert("Greška pri učitavanju podataka");
-      }
-    };
-
-    fetchData();
+    
+    axios
+      .get("/makeup-artists")
+      .then((res) => setMakeupArtists(res.data.data || []))
+      .catch((err) => {
+        console.error("Greška pri učitavanju šminkera:", err);
+        setMakeupArtists([]);
+      });
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!date || !time || !serviceId || !makeupArtistId) {
-      alert("Molimo popunite sva polja.");
+    if (!selectedService || !selectedArtist || !date || !time) {
+      alert("Molimo popunite sva polja");
       return;
     }
-
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        "/reservations",
-        {
-          date,
-          time,
-          service_id: serviceId,
-          makeup_artist_id: makeupArtistId,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      alert("Rezervacija uspešna");
-      // Očisti formu
-      setDate("");
-      setTime("");
-      setServiceId("");
-      setMakeupArtistId("");
-    } catch (err) {
-      alert("Greška pri rezervaciji");
-    }
+    alert(`Rezervacija uspešna!\nUsluga: ${selectedService}\nŠminker: ${selectedArtist}\nDatum: ${date}\nVreme: ${time}`);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Forma za tvoju rezervaciju</h2>
-      <label>
-        Usluga:
-        <select
-          value={serviceId}
-          onChange={(e) => setServiceId(e.target.value)}
-          required
-        >
-          <option value="">Izaberite uslugu</option>
-          {services.map((service) => (
-            <option key={service.id} value={service.id}>
-              {service.name}
-            </option>
-          ))}
-        </select>
-      </label>
-      <br />
+    <form onSubmit={handleSubmit} className="reservation-form">
+      <h2 color="#009b43ff">Rezervacija</h2>
 
-      <label>
-        Šminker:
-        <select
-          value={makeupArtistId}
-          onChange={(e) => setMakeupArtistId(e.target.value)}
-          required
-        >
-          <option value="">Izaberite šminkera</option>
-          {makeupArtists.map((artist) => (
-            <option key={artist.id} value={artist.id}>
-              {artist.name}
-            </option>
-          ))}
-        </select>
-      </label>
-      <br />
 
-      <label>
-        Datum:
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
-      </label>
-      <br />
+      <label>Usluga:</label>
+      <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
+        <option value="">Izaberi uslugu</option>
+        {services.map((service) => (
+          <option key={service.id} value={service.name}>
+            {service.name}
+          </option>
+        ))}
+      </select>
 
-      <label>
-        Vreme:
-        <input
-          type="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          required
-        />
-      </label>
-      <br />
+      <label>Šminker:</label>
+      <select value={selectedArtist} onChange={(e) => setSelectedArtist(e.target.value)}>
+        <option value="">Izaberi šminkera</option>
+        {makeupArtists.map((artist) => (
+          <option key={artist.id} value={artist.name}>
+            {artist.name}
+          </option>
+        ))}
+      </select>
+
+      <label>Datum:</label>
+      <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+
+      <label>Vreme:</label>
+      <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
 
       <button type="submit">Rezerviši</button>
     </form>
   );
-}
+};
 
 export default ReservationForm;
