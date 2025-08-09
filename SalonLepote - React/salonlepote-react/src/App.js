@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
-
+import AdminRoute from "./components/AdminRoute";
  
 import Home from './pages/Home';
 import Login from "./pages/Login";
@@ -12,7 +12,10 @@ import MakeupArtists from "./pages/makeupArtists";
 import ReservationForm from "./pages/ReservationForm";
 import NotFound from "./pages/NotFound"; // opcionalno
 import Gallery from './pages/Gallery';
-
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminLayout from './components/AdminLayout';
+import Reservations from "./pages/Reservations";
+import Users from "./pages/Users";
 
 import './styles.css';
 
@@ -31,6 +34,9 @@ function App() {
         <Route path="*" element={<NotFound />} /> {/* opcionalno */}
         <Route path="/" element={<Home />} />
         <Route path="/galerija" element={<Gallery />} />
+        <Route path="/admin-dashboard" element={ <AdminRoute> <AdminLayout><AdminDashboard /></AdminLayout></AdminRoute> }/>
+        <Route path="/admin/reservations" element={ <AdminRoute> <AdminLayout><Reservations /></AdminLayout></AdminRoute> }/>
+        <Route path="/admin/users" element={<AdminRoute> <AdminLayout> <Users /></AdminLayout></AdminRoute>}/>
         </Routes>
       </div>
     </BrowserRouter>
