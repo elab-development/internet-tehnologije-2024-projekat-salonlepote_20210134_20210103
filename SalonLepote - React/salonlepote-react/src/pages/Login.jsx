@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "../api/axios";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import useAuth from "../hooks/UseAuth";
 
 const validateEmail = (email) => {
     return /\S+@\S+\.\S+/.test(email);
@@ -11,12 +12,20 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { login } = useAuth(); //uzmi login metodu iz hooka
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post("/login", { email, password });
-      localStorage.setItem("token", res.data.data.token);
+      // očekujemo da backend vrati token i user podatke
+      const token = res.data.data.token;
+      const user = res.data.data.user;
+    
+      login(token, user); // prosleđujemo i token i user hook-u
+      
       alert("Uspešna prijava");
+      window.location.href = "/"; // osvežavanje i preusmeravanje na početnu
     } catch (err) {
       alert("Greška pri prijavi");
     }
