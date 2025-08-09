@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 import "../styles/NavBar.css";
 import logoImage from "../assets/logo-bez-pozadine.png";
 import Button from "../components/Button";
+import useAuth from "../hooks/UseAuth";
 
 function NavBar() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user, logout, isLoggedIn } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    logout();
     window.location.href = "/login"; // preusmeravanje na login
   };
 
@@ -45,9 +45,9 @@ function NavBar() {
           )}
 
           {/* Login / Logout dugme */}
-          {user ? (
+          {isLoggedIn ? (
             <>
-              <li style={{ fontWeight: "bold" }}>{user.name} ({user.role})</li>
+              <li style={{ fontWeight: "bold" }}>{user?.name} ({user?.role})</li>
               <li><Button onClick={handleLogout}>Logout</Button></li>
             </>
           ) : (
