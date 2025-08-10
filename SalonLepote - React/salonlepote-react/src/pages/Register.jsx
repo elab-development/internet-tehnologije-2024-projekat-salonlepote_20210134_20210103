@@ -1,7 +1,16 @@
 import { useState } from "react";
 import axios from "../api/axios";
+import { useNavigate } from "react-router-dom";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import Form from "../styles/Form.css"
+
+const validateEmail = (email) => {
+    return /\S+@\S+\.\S+/.test(email);
+  };
 
 function Register() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +23,7 @@ function Register() {
     setSuccess("");
     setError("");
 
-    // ✅ Provera da lozinke odgovaraju
+   
     if (password !== confirm) {
       setError("Lozinke se ne poklapaju.");
       return;
@@ -28,7 +37,8 @@ function Register() {
         password_confirmation: confirm,
       });
 
-      setSuccess("Uspešna registracija!");
+      setSuccess("Uspešna registracija! Možete se prijaviti!");
+      navigate("/login");
       // Resetuj formu
       setName("");
       setEmail("");
@@ -45,45 +55,47 @@ function Register() {
 
   return (
     <div>
-      <h2>Registracija</h2>
 
-      <form onSubmit={handleRegister}>
-        <input
+      <form onSubmit={handleRegister} style={Form} >
+         <h2 style={{ textAlign: "center", marginBottom: "24px" }}>Registracija</h2>
+        <label className="required">Ime i prezime:</label>
+        <Input
           type="text"
-          placeholder="Ime"
+          placeholder="Unesite Vaše ime i prezime"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          required
         /><br />
 
-        <input
+        <label className="required">Email:</label>
+        <Input
           type="email"
-          placeholder="Email"
+          placeholder="Unesite Vaš email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
+          error={!validateEmail(email) && email ? "Neispravan email format" : ""}
         /><br />
 
-        <input
+        <label className="required">Lozinka:</label>
+        <Input
           type="password"
-          placeholder="Lozinka"
+          placeholder="Unesite Vašu lozinku"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
+          error={password.length < 8 && password ? "Lozinka je prekratka. Lozinka mora imati bar 8 karaktera." : ""}
         /><br />
 
-        <input
+        <label className="required">Potvrda lozinke:</label>
+        <Input
           type="password"
-          placeholder="Potvrdi lozinku"
+          placeholder="Ponovo unesite Vašu lozinku"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          required
+          error={password.length < 8 && password ? "Lozinka je prekratka. Lozinka mora imati bar 8 karaktera." : ""}
         /><br />
 
-        <button type="submit">Registruj se</button>
+        <Button type="submit">Registruj se</Button>
       </form>
 
-      {/* ✅ Poruke za korisnika */}
       {success && <p style={{ color: "green" }}>{success}</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>

@@ -3,6 +3,7 @@ import axios from "../api/axios";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import {useAuth} from "../hooks/AuthContext";
+import { Link } from "react-router-dom";
 
 const validateEmail = (email) => {
     return /\S+@\S+\.\S+/.test(email);
@@ -64,13 +65,18 @@ function Login() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Unesite lozinku"
-        error={password.length < 6 && password ? "Lozinka je prekratka" : ""}
+        error={password.length < 8 && password ? "Lozinka je prekratka. Lozinka sadrži bar 8 karaktera." : ""}
         required
       />
 
 
     <Button type="submit">Prijavi se</Button>
+    <p style={{ fontSize: "16px", color: "#555", textAlign: "center", marginTop: "10px" }}>
+      Nemate nalog?{" "}
+      <Link to="/register">Registrujte se.</Link>
+    </p>
     </form>
+    
   );
 }
 export default Login;
