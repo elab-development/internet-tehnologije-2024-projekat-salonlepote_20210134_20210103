@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "../api/axios";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import useAuth from "../hooks/UseAuth";
+import {useAuth} from "../hooks/AuthContext";
 
 const validateEmail = (email) => {
     return /\S+@\S+\.\S+/.test(email);

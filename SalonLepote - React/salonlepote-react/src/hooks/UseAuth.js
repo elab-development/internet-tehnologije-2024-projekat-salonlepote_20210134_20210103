@@ -1,30 +1,11 @@
-import { useState } from "react";
+import { useAuth } from "./AuthContext";
 
-function useAuth() {
-  // inicijalizacija state-a iz localStorage, ako postoje
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+function MyComponent() {
+  const { user, login, logout, isLoggedIn } = useAuth();
 
-  const login = (newToken, newUser) => {
-    localStorage.setItem("token", newToken);
-    localStorage.setItem("user", JSON.stringify(newUser));
-    setToken(newToken);
-    setUser(newUser);
-  };
+  if (!isLoggedIn) {
+    return <div>Niste ulogovani</div>;
+  }
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setToken(null);
-    setUser(null);
-  };
-
-  const isLoggedIn = !!token;
-
-  return { token, user, login, logout, isLoggedIn };
+  return <div>Dobrodošli, {user.name}</div>;
 }
-
-export default useAuth;

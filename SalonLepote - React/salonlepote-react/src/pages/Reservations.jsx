@@ -1,81 +1,131 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
-import "../styles/ReservationForm.css";
-import background from "../assets/makeupback.jpg";
+import stilTabele from "../styles/Table.css";
+import Button from "../components/Button";
 
-const ReservationForm = () => {
-  const [services, setServices] = useState([]);
-  const [makeupArtists, setMakeupArtists] = useState([]);
-  const [selectedService, setSelectedService] = useState("");
-  const [selectedArtist, setSelectedArtist] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+export default function Rezervacije() {
+  const [reservations, setReservations] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editFormData, setEditFormData] = useState({});
 
-  
-
-  useEffect(() => {
-  
-    setServices([
-      { id: 1, name: "Dnevna šminka" },
-      { id: 2, name: "Svečana šminka" },
-      { id: 3, name: "Venčana šminka" },
-      { id: 4, name: "Profesionalno konturisanje" }
-    ]);
-
-    
-    axios
-      .get("/makeup-artists")
-      .then((res) => setMakeupArtists(res.data.data || []))
-      .catch((err) => {
-        console.error("Greška pri učitavanju šminkera:", err);
-        setMakeupArtists([]);
-      });
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!selectedService || !selectedArtist || !date || !time) {
-      alert("Molimo popunite sva polja");
-      return;
+  const fetchReservations = async () => {
+    try {
+      const res = await axios.get("/reservations");
+      setReservations(res.data.data);
+    } catch (err) {
+      console.error(err);
+      alert("Greška pri učitavanju rezervacija");
     }
-    alert(`Rezervacija uspešna!\nUsluga: ${selectedService}\nŠminker: ${selectedArtist}\nDatum: ${date}\nVreme: ${time}`);
   };
 
+  const handleDelete = async (id) => {
+    if (window.confirm("Da li ste sigurni da želite da obrišete rezervaciju?")) {
+      try {
+        await axios.delete(`/reservations/${id}`);
+        setReservations((prev) => prev.filter((r) => r.id !== id));
+        alert("Rezervacija obrisana.");
+      } catch (err) {
+        alert("Greška pri brisanju rezervacije.");
+        console.error(err);
+      }
+    }
+  };
+
+  const handleEditClick = (reservation) => {
+    setEditingId(reservation.id);
+    setEditFormData({
+      date: reservation.date || "",
+      time: reservation.time || "",
+      status: reservation.status || "",
+    });
+  };
+
+  const handleCancelClick = () => {
+    setEditingId(null);
+    setEditFormData({});
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async (id) => {
+    try {
+      await axios.put(`/reservations/${id}`, editFormData);
+      setReservations((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, ...editFormData } : r))
+      );
+      setEditingId(null);
+      setEditFormData({});
+      alert("Rezervacija je uspešno izmenjena.");
+    } catch (err) {
+      console.error(err);
+      alert("Greška pri izmeni rezervacije.");
+    }
+  };
+
+
+  useEffect(() => {
+    fetchReservations();
+  }, []);
+
   return (
-    <form onSubmit={handleSubmit} className="reservation-form">
-      <h2 color="#009b43ff">Rezervacija šminkanja</h2>
+    <div style={{ padding: "20px" }}>
+      <h1>Rezervacije</h1>
+      <table border="1" cellPadding="8" style={{ width: "100%" }} className="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Klijent</th>
+            <th>Šminker</th>
+            <th>Usluga</th>
+            <th>Datum</th>
+            <th>Vreme</th>
+            <th>Status</th>
+            <th>Akcije</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reservations.map((r) => (
+            <tr key={r.id}>
+              <td>{r.id}</td>
+              <td>{r.user?.name || "N/A"}</td>
+              <td>{r.makeup_artist?.name || "N/A"}</td>
+              <td>{r.service?.name || "N/A"}</td>
 
-
-      <label>Usluga:</label>
-      <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
-        <option value="">Izaberi uslugu</option>
-        {services.map((service) => (
-          <option key={service.id} value={service.name}>
-            {service.name}
-          </option>
-        ))}
-      </select>
-
-      <label>Šminker:</label>
-      <select value={selectedArtist} onChange={(e) => setSelectedArtist(e.target.value)}>
-        <option value="">Izaberi šminkera</option>
-        {makeupArtists.map((artist) => (
-          <option key={artist.id} value={artist.name}>
-            {artist.name}
-          </option>
-        ))}
-      </select>
-
-      <label >Datum:</label>
-      <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-
-      <label>Vreme:</label>
-      <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
-
-      <button type="submit">Rezerviši</button>
-    </form>
+              {/* Renderuj input ili tekst u zavisnosti da li je u režimu izmene */}
+              <td>
+                {editingId === r.id ? (<input type="date" name="date" value={editFormData.date} onChange={handleInputChange}/>) : (r.date)}
+              </td>
+              <td>
+                {editingId === r.id ? (<input type="time" name="time" value={editFormData.time} onChange={handleInputChange} />) : (r.time)}
+              </td>
+              <td>
+                {editingId === r.id ? (<select name="status" value={editFormData.status} onChange={handleInputChange} >
+                    <option value="confirmed">confirmed</option>
+                    <option value="cancelled">cancelled</option>
+                    <option value="pending">pending</option>
+                  </select>) : (r.status)}
+              </td>
+              <td>
+                {editingId === r.id ? (
+                  <>
+                    <Button onClick={() => handleSave(r.id)} style={{ marginRight: "12px" }}>Sačuvaj</Button>
+                    <Button onClick={handleCancelClick}>Otkaži</Button>
+                  </>
+                ) : (
+                  <>
+                    <Button onClick={() => handleEditClick(r)} style={{ marginRight: "12px" }}> Izmeni</Button>
+                    <Button onClick={() => handleDelete(r.id)}>Obriši</Button>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
-};
-
-export default ReservationForm;
-
+}

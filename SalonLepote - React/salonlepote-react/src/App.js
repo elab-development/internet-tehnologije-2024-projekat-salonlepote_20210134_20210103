@@ -31,12 +31,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/makeup-artists" element={<MakeupArtists />} />
-        <Route path="/rezervisi" element={<ReservationForm />} />
+        <Route path="/reservations/new" element={<ReservationForm />} />
         <Route path="*" element={<NotFound />} /> {/* opcionalno */}
-        <Route path="/" element={<Home />} />
         <Route path="/galerija" element={<Gallery />} />
         <Route path="/admin-dashboard" element={ <AdminRoute> <AdminLayout><AdminDashboard /></AdminLayout></AdminRoute> }/>
         <Route path="/admin/reservations" element={ <AdminRoute> <AdminLayout><Reservations /></AdminLayout></AdminRoute> }/>
+        <Route path="/reservations" element={<Reservations />} />
+        <Route path="/reservations/${r.id}" element={<ReservationForm />} />
         <Route path="/admin/users" element={<AdminRoute> <AdminLayout> <Users /></AdminLayout></AdminRoute>}/>
         <Route path="/treatments" element={<Treatments />} />
         </Routes>

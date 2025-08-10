@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import "../styles/ReservationForm.css";
+import {useAuth} from "../hooks/AuthContext";
 
 const ReservationForm = () => {
+  const { id } = useParams(); // Ako postoji, znači da menjamo
+  const navigate = useNavigate();
+
   const [services, setServices] = useState([]);
   const [makeupArtists, setMakeupArtists] = useState([]);
   const [selectedService, setSelectedService] = useState("");
   const [selectedArtist, setSelectedArtist] = useState("");
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState(""); 
+  const { user } = useAuth();
 
   useEffect(() => {
   
@@ -29,25 +35,66 @@ const ReservationForm = () => {
       });
   }, []);
 
-  const handleSubmit = (e) => {
+  // Ako je edit mode — učitavamo postojeće podatke
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`/reservations/${id}`)
+        .then((res) => {
+          const r = res.data;
+          setSelectedService(r.service_id || "");
+          setSelectedArtist(r.makeup_artist_id || "");
+          setDate(r.date || "");
+          setTime(r.time || "");
+        })
+        .catch((err) => console.error("Greška pri učitavanju rezervacije:", err));
+    }
+  }, [id]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validacija unosa
     if (!selectedService || !selectedArtist || !date || !time) {
       alert("Molimo popunite sva polja");
       return;
     }
-    alert(`Rezervacija uspešna!\nUsluga: ${selectedService}\nŠminker: ${selectedArtist}\nDatum: ${date}\nVreme: ${time}`);
+
+    const payload = {
+      service_id: Number(selectedService),
+      makeup_artist_id: Number(selectedArtist),
+      date,
+      time,
+      user_id: user.id,
+    };
+
+    try {
+      if (id) {
+        await axios.put(`/reservations/${id}`, payload);
+        alert("Rezervacija uspešno izmenjena!");
+        navigate("reservations");
+      } else {
+        console.log("Payload za slanje:", payload);
+        await axios.post(`/reservations`, payload);
+        alert("Rezervacija uspešno dodata!");
+        navigate("/");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Greška pri čuvanju rezervacije.");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="reservation-form">
-      <h2 color="#009b43ff">Rezervacija</h2>
+      <h2>{id ? "Izmena rezervacije" : "Nova rezervacija"}</h2>
 
 
       <label>Usluga:</label>
       <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)}>
         <option value="">Izaberi uslugu</option>
         {services.map((service) => (
-          <option key={service.id} value={service.name}>
+          <option key={service.id} value={service.id}>
             {service.name}
           </option>
         ))}
@@ -57,7 +104,7 @@ const ReservationForm = () => {
       <select value={selectedArtist} onChange={(e) => setSelectedArtist(e.target.value)}>
         <option value="">Izaberi šminkera</option>
         {makeupArtists.map((artist) => (
-          <option key={artist.id} value={artist.name}>
+          <option key={artist.id} value={artist.id}>
             {artist.name}
           </option>
         ))}
@@ -69,7 +116,7 @@ const ReservationForm = () => {
       <label>Vreme:</label>
       <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
 
-      <button type="submit">Rezerviši</button>
+      <button type="submit">{id ? "Sačuvaj izmene" : "Rezerviši"}</button>
     </form>
   );
 };

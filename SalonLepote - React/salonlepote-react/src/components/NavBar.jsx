@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import "../styles/NavBar.css";
 import logoImage from "../assets/logo-bez-pozadine.png";
 import Button from "../components/Button";
-import useAuth from "../hooks/UseAuth";
+import {useAuth} from "../hooks/AuthContext";
 
 function NavBar() {
   const { user, logout, isLoggedIn } = useAuth();
@@ -28,7 +28,7 @@ function NavBar() {
           <li><Link to="/galerija">Galerija</Link></li>
            <li><Link to="/treatments">Tretmani</Link></li>
           <li><Link to="/makeup-artists">Šminkeri</Link></li>
-          <li><Link to="/rezervisi">Rezerviši</Link></li>
+          <li><Link to="/reservations/new">Rezerviši</Link></li>
     
 
            {/* Admin vidi dashboard */}
