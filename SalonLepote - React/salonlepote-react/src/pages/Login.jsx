@@ -69,6 +69,10 @@ function Login() {
         required
       />
 
+      <p style={{ textAlign: "center", marginTop: "10px",color: "#555" }}>
+        Zaboravili ste lozinku?{" "}
+        <Link to="/forgot-password">Resetujte je.</Link>
+      </p>
 
     <Button type="submit">Prijavi se</Button>
     <p style={{ fontSize: "16px", color: "#555", textAlign: "center", marginTop: "10px" }}>
