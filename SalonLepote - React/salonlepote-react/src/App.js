@@ -17,6 +17,7 @@ import AdminLayout from './components/AdminLayout';
 import Reservations from "./pages/Reservations";
 import Users from "./pages/Users";
 import Treatments from "./pages/Treatments";
+import MyReservations from "./pages/MyReservations";
 
 import './styles.css';
 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/reservations/${r.id}" element={<ReservationForm />} />
         <Route path="/admin/users" element={<AdminRoute> <AdminLayout> <Users /></AdminLayout></AdminRoute>}/>
         <Route path="/treatments" element={<Treatments />} />
+        <Route path="/my-reservations" element={<MyReservations />} />
         </Routes>
       </div>
     </BrowserRouter>

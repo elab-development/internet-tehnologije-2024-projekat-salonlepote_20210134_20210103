@@ -43,7 +43,7 @@ function NavBar() {
 
           {/* Client vidi svoje rezervacije */}
           { user?.role === "client" && (
-            <li><Link to="/client-reservations">Moje rezervacije</Link></li>
+            <li><Link to="/my-reservations">Moje rezervacije</Link></li>
           )}
 
           {/* Login / Logout dugme */}
