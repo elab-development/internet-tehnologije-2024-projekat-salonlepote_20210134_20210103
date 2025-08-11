@@ -57,6 +57,27 @@ export default function MyReservations() {
     }
   };
 
+  const cancelReservation = async (id) => {
+    const confirmAction = window.confirm(
+      "Da li ste sigurni da želite otkazati ovu rezervaciju?"
+    );
+
+    if (!confirmAction) return;
+
+    try {
+      await axiosInstance.post(`/reservations/${id}/cancel`, {}, { withCredentials: true });
+      alert("Rezervacija otkazana.");
+      
+      setReservations(prev =>
+        prev.map(r =>
+          r.id === id ? { ...r, status: "canceled" } : r
+        )
+      );
+    } catch (err) {
+      alert("Došlo je do greške prilikom otkazivanja rezervacije.");
+    }
+  };
+
   if (loading) return <p>Učitavanje rezervacija...</p>;
   if (error) return <p>{error}</p>;
 
@@ -75,6 +96,7 @@ export default function MyReservations() {
               <th>Vreme</th>
               <th>Status</th>
               {user?.role === "makeup_artist" && <th>Potvrda</th>}
+              {user?.role === "client" && <th>Otkazivanje</th>}
             </tr>
           </thead>
           <tbody>
@@ -89,6 +111,13 @@ export default function MyReservations() {
                   <td>
                     {r.status !== "confirmed" && (
                       <Button  onClick={() => confirmReservation(r.id)}> Potvrdi rezervaciju</Button>
+                    )}
+                  </td>
+                )}
+                 {user?.role === "client" && (
+                  <td>
+                    {r.status !== "canceled" && r.status !== "confirmed" && (
+                      <Button onClick={() => cancelReservation(r.id)}>Otkaži</Button>
                     )}
                   </td>
                 )}
