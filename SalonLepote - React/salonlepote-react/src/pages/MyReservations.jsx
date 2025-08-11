@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../hooks/AuthContext"; 
 import { getClientReservations, getMakeupArtistReservations } from "../api/api";
 import "../styles/Table.css";
+import axiosInstance from "../api/axios"; 
+import Button from "../components/Button";
 
 export default function MyReservations() {
   const { user } = useAuth();
@@ -34,6 +36,27 @@ export default function MyReservations() {
     fetchReservations();
   }, [user]);
 
+   const confirmReservation = async (id) => {
+    const confirmAction = window.confirm(
+      "Da li ste sigurni da želite potvrditi ovu rezervaciju? Korisniku će biti poslat mejl."
+    );
+
+    if (!confirmAction) return; 
+
+    try {
+       await axiosInstance.get(`/confirm-reservation/${id}`, { withCredentials: true });
+      alert("Rezervacija potvrđena! Korisniku je poslat mejl o potvrdi.");
+      
+      setReservations(prev =>
+        prev.map(r =>
+          r.id === id ? { ...r, status: "confirmed" } : r
+        )
+      );
+    } catch (err) {
+      alert("Došlo je do greške prilikom potvrde rezervacije.");
+    }
+  };
+
   if (loading) return <p>Učitavanje rezervacija...</p>;
   if (error) return <p>{error}</p>;
 
@@ -51,6 +74,7 @@ export default function MyReservations() {
               <th>Datum</th>
               <th>Vreme</th>
               <th>Status</th>
+              {user?.role === "makeup_artist" && <th>Potvrda</th>}
             </tr>
           </thead>
           <tbody>
@@ -61,6 +85,13 @@ export default function MyReservations() {
                 <td>{r.date}</td>
                 <td>{r.time}</td>
                 <td>{r.status}</td>
+                {user?.role === "makeup_artist" && (
+                  <td>
+                    {r.status !== "confirmed" && (
+                      <Button  onClick={() => confirmReservation(r.id)}> Potvrdi rezervaciju</Button>
+                    )}
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
