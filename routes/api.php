@@ -67,3 +67,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/holidays/{year}', [HolidayController::class, 'getHolidays']);
 
 Route::get('/gender/{name}', [GenderController::class, 'detectGender']);
+
+//ruta za potvrdu rezervacija, slanje mejlova
+Route::middleware('auth:sanctum')->get('/confirm-reservation/{reservationId}', [ReservationController::class, 'confirmReservation']);

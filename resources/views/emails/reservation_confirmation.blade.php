@@ -8,7 +8,7 @@
 <body>
     <h1>Dear {{ $name }}</h1>
     <p>Your reservation has been confirmed.</p>
-    <p>Reservation Date: {{ $reservation_date }}</p>
+    <p>Confirmed at: {{ $reservation_date }}</p>
     <p>Thank you for choosing our service!</p>
 </body>
 </html>
