@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 
-//AdminSidebar sluzi za navigaciju kroz admin deo
 export default function AdminSidebar() {
   const activeStyle = {
     fontWeight: "bold",

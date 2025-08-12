@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import Input from "../components/Input";
+import Button from "../components/Button";
 
 function ResetPassword() {
   const [email, setEmail] = useState("");
@@ -38,7 +39,7 @@ function ResetPassword() {
           required
         />
 
-        <input
+        <Input
           type="password"
           label="Nova lozinka:"
           placeholder="Unesite Vašu novu lozinku"
@@ -47,7 +48,7 @@ function ResetPassword() {
           required
         />
 
-        <input
+        <Input
           type="password"
           label= "Potvrdi lozinku:"
           placeholder="Unesite ponovo novu lozinku"
@@ -56,7 +57,7 @@ function ResetPassword() {
           required
         />
 
-        <input
+        <Input
           type="text"
           label="Token:"
           placeholder="Unesite token iz mejla"
@@ -65,7 +66,7 @@ function ResetPassword() {
           required
         />
 
-        <button type="submit">Promeni lozinku</button>
+        <Button type="submit">Promeni lozinku</Button>
       </form>
     </div>
   );

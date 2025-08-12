@@ -48,7 +48,7 @@ function MakeupArtists() {
             email={artist.email}
             role="Kozmetički tehničar"
             description="Specijalizovan/na za glam i bridal šminku, sve vrste tretmana lica i tela, pedikir, manikir, masaže i stilizovanje frizura." 
-            image={artistImages[index]} //slika na osnovu indeksa
+            image={artistImages[index]} 
           />
           ))}
            </div>

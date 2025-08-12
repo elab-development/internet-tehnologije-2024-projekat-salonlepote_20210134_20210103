@@ -13,20 +13,20 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { login } = useAuth(); //uzmi login metodu iz hooka
+  const { login } = useAuth(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post("/login", { email, password });
-      // očekujemo da backend vrati token i user podatke
+     
       const token = res.data.data.token;
       const user = res.data.data.user;
     
-      login(token, user); // prosleđujemo i token i user hook-u
+      login(token, user); 
       
       alert("Uspešna prijava");
-      window.location.href = "/"; // osvežavanje i preusmeravanje na početnu
+      window.location.href = "/"; 
     } catch (err) {
       alert("Greška pri prijavi");
     }

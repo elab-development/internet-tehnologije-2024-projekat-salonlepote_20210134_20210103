@@ -37,7 +37,7 @@
 
 .labelRequired {
   color: red;
-  margin-left: 4px; /* razmak između teksta i zvezdice */
+  margin-left: 4px;
   font-weight: bold;
   font-size: 18px;
   line-height: 1;

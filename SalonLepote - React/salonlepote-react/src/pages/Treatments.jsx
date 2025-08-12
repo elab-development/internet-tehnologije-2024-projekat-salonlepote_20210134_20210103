@@ -107,7 +107,7 @@ function Treatments() {
         value={category}
         onChange={(e) => {
           setCategory(e.target.value);
-          setCurrentPage(1); // resetuj stranicu kad filter promeni
+          setCurrentPage(1); 
         }}
         style={selectStyle}
       >

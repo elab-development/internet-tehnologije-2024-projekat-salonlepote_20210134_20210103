@@ -17,10 +17,10 @@
 }
 
 .navbar-logo a {
-  font-size: 1.75rem; /* malo veća slova za logo */
+  font-size: 1.75rem; 
   font-weight: 700;
   text-decoration: none;
-  color: #5a2a83; /* tamno ljubičasta */
+  color: #5a2a83; 
   letter-spacing: 1.5px;
   user-select: none;
 }
@@ -28,15 +28,15 @@
 .navbar-menu {
   list-style: none;
   display: flex;
-  gap: 2rem; /* malo veći razmak između linkova */
+  gap: 2rem; 
   margin: 0;
   padding: 0;
 }
 
 .navbar-menu a {
   text-decoration: none;
-  color: #444; /* tamnija, ali ne baš crna boja */
-  font-size: 1.1rem; /* veća slova */
+  color: #444; 
+  font-size: 1.1rem; 
   font-weight: 600;
   padding: 0.3rem 0.5rem;
   border-radius: 4px;
@@ -47,8 +47,8 @@
 
 .navbar-menu a:hover,
 .navbar-menu a:focus {
-  color: #f5f5f5; /* svetla boja za tekst na hover */
-  background-color: #b46cf4; /* tamno ljubičasta pozadina na hover */
+  color: #f5f5f5; 
+  background-color: #b46cf4; 
   outline: none;
   cursor: pointer;
 }

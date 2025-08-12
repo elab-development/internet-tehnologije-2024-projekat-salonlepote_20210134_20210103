@@ -9,7 +9,7 @@ function NavBar() {
 
   const handleLogout = () => {
     logout();
-    window.location.href = "/login"; // preusmeravanje na login
+    window.location.href = "/login"; 
   };
 
   return (

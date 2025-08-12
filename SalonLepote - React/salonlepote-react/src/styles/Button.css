@@ -7,17 +7,15 @@
   transition: background-color 0.3s ease;
 }
 
-/* Glavni stil */
 .btn.primary {
-  background-color: #6a0dad;
+  background-color: #7a00d7;
   color: white;
 }
 
 .btn.primary:hover {
-  background-color: #5a009e;
+  background-color: #4c0086;
 }
 
-/* Sekundarni stil */
 .btn.secondary {
   background-color: #f0f0f0;
   color: #333;
@@ -28,7 +26,6 @@
   background-color: #e0e0e0;
 }
 
-/* Disabled stanje */
 .btn:disabled {
   background-color: #ccc;
   color: #888;

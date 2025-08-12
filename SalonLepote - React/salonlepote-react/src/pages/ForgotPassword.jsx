@@ -2,6 +2,8 @@ import { useState } from "react";
 import axiosInstance from "../api/axios.js";
 import {Link} from "react-router-dom";
 import Input from "../components/Input.jsx";
+import Button from "../components/Button.jsx";
+import { hover } from "@testing-library/user-event/dist/hover.js";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -29,14 +31,14 @@ function ForgotPassword() {
           placeholder={"Unesite Vaš email"}
           required 
         />
-        <button type="submit">Pošalji link</button>
+        <Button type="submit">Pošalji link</Button>
         <label>Ako ste primili email, unesite token:</label>
         <div style={{ marginTop: "15px", textAlign: "center" }}>
         <Link
           to="/reset-password"
           style={{
             padding: "10px 16px",
-            backgroundColor: "#7f39fb",
+            backgroundColor: "#7a00d7",
             color: "white",
             borderRadius: "8px",
             textDecoration: "none",

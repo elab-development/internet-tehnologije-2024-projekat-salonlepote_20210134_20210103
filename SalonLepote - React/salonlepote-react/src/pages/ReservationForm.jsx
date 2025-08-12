@@ -4,9 +4,10 @@ import axios from "../api/axios";
 import "../styles/ReservationForm.css";
 import {useAuth} from "../hooks/AuthContext";
 import Input from "../components/Input";
+import Button from "../components/Button";
 
 const ReservationForm = () => {
-  const { id } = useParams(); // Ako postoji, znači da menjamo
+  const { id } = useParams(); 
   const navigate = useNavigate();
 
   const [services, setServices] = useState([]);
@@ -112,7 +113,7 @@ const ReservationForm = () => {
       <Input type="date" label="Datum" value={date} onChange={(e) => setDate(e.target.value)} />
       <Input type="time" label="Vreme:" value={time} onChange={(e) => setTime(e.target.value)} />
 
-      <button type="submit">{id ? "Sačuvaj izmene" : "Rezerviši"}</button>
+      <Button type="submit">{id ? "Sačuvaj izmene" : "Rezerviši"}</Button>
     </form>
   );
 };
