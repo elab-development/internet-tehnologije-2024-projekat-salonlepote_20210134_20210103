@@ -6,9 +6,13 @@ import diplomaImg from "../assets/diplome.jpg";
 import fotoJpg from "../assets/slike.jpg";
 import entImg from "../assets/unutrasnjost.jpg";
 import entImg2 from "../assets/unutrasnjost2.jpg";
+import masazaImg from "../assets/masaza1.jpg";
+import sminkanjeImg from "../assets/sminkanje1.jpg";
+import tretmanImg from "../assets/tretman1.jpg";
 
 import Testimonials from "../components/Testimonials";
-
+import Card from '../components/Card';
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   return (
@@ -19,7 +23,7 @@ function Home() {
       <div className="home-container">
         <div className="home-text">
           
-
+            
           <p>
             U našem salonu lepote, vaša nega i zadovoljstvo su na prvom mestu. Sa pažljivo biranim tretmanima, profesionalnim osobljem i prijatnom atmosferom...
           </p>
@@ -60,27 +64,34 @@ function Home() {
     <h2>Naše usluge</h2>
     <div className='home-wrapper'>
     
-        <div className="home-container" style={{ textAlign: 'center', padding: '20px 0' }}>
+        <div className="home-container" style={{ textAlign: 'center', padding: '20px 0' ,display: 'flex', flexWrap: 'wrap', maxWidth: '1200px'}}>
           
-          <p>
-            Nudimo širok spektar usluga uključujući profesionalni make-up, negu lica,
-            tretmane kože, masaže i još mnogo toga. <br />
-            Koristimo samo najkvalitetnije proizvode kako bismo osigurali vrhunske rezultate.
-            <br>
-            </br>
-            </p>
+      <div className="cards-container">
+      <Card
+        title="Tretmani lica"
+        description="Dubinski očistite, nahranite i osvežite svoju kožu uz personalizovane tretmane lica. 
+        Poboljšajte ten, smanjite znakove umora i zasijajte prirodnim sjajem."
+        image={tretmanImg}
+        actions={[{ label: "Zakaži termin", onClick: () => (window.location.href = "/reservations/new")}]}
 
-          <p className="cta">
-           <i> Pronađite pravi tretman za sebe.</i>
-          </p>
-          
-          
+      />
+      <Card
+        title="Masaže"
+        description="Opustite telo i um uz profesionalne masaže koje oslobađaju od stresa, smanjuju napetost mišića i vraćaju energiju. 
+        Prepustite se potpunom užitku i regeneraciji."
+        image={masazaImg}
+        actions={[{ label: "Zakaži termin", onClick: () => (window.location.href = "/reservations/new")}]}
+      />
+      <Card
+        title="Šminkanje"
+        description="Blistajte u svakoj prilici uz profesionalno šminkanje prilagođeno vašem stilu i licu. 
+        Od dnevnog do svečanog izgleda — svaki detalj savršen."
+        image={sminkanjeImg}
+        actions={[{ label: "Zakaži termin", onClick: () => (window.location.href = "/reservations/new")}]}
+      />
+      </div>
         </div>
-        <div className="home-image">
-          <img src={uslugeImage} alt="Usluge salona" />
-        </div>
-
-
+        
       </div>
 
 <div className='home-wrapper'>
