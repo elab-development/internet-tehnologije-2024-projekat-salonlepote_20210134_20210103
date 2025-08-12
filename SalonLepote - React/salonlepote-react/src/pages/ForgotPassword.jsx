@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axiosInstance from "../api/axios.js";
 import {Link} from "react-router-dom";
+import Input from "../components/Input.jsx";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -20,12 +21,13 @@ function ForgotPassword() {
     <div>
       <form onSubmit={handleSubmit}>
         <h2>Zaboravljena lozinka</h2>
-        <label>Email:</label>
-        <input
+        <Input
           type="email"
+          label="Email:"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          required
+          placeholder={"Unesite Vaš email"}
+          required 
         />
         <button type="submit">Pošalji link</button>
         <label>Ako ste primili email, unesite token:</label>

@@ -1,6 +1,5 @@
 import React from "react";
 
-// Funkcija koja prikazuje zvezdice (pune i polu)
 function StarRating({ rating }) {
   const stars = [];
   for (let i = 1; i <= 5; i++) {
@@ -16,7 +15,6 @@ function StarRating({ rating }) {
 }
 
 export default function ClientRatings() {
-  // Možemo ovo zameniti stvarnim podacima iz baze
   const ratings = [5, 4, 5, 5, 4, 5, 5, 3, 5, 5]; 
 
   const averageRating =

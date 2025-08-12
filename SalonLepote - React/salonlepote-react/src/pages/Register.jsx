@@ -39,7 +39,7 @@ function Register() {
 
       setSuccess("Uspešna registracija! Možete se prijaviti!");
       navigate("/login");
-      // Resetuj formu
+      
       setName("");
       setEmail("");
       setPassword("");
@@ -58,40 +58,45 @@ function Register() {
 
       <form onSubmit={handleRegister} style={Form} >
          <h2 style={{ textAlign: "center", marginBottom: "24px" }}>Registracija</h2>
-        <label className="required">Ime i prezime:</label>
+
         <Input
           type="text"
+          label="Ime i prezime:"
           placeholder="Unesite Vaše ime i prezime"
           value={name}
           onChange={(e) => setName(e.target.value)}
-        /><br />
+          required
+        />
 
-        <label className="required">Email:</label>
         <Input
           type="email"
+          label="Email:"
           placeholder="Unesite Vaš email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={!validateEmail(email) && email ? "Neispravan email format" : ""}
-        /><br />
+          required
+        />
 
-        <label className="required">Lozinka:</label>
         <Input
           type="password"
+          label="Lozinka:"
           placeholder="Unesite Vašu lozinku"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={password.length < 8 && password ? "Lozinka je prekratka. Lozinka mora imati bar 8 karaktera." : ""}
-        /><br />
+          required
+        />
 
-        <label className="required">Potvrda lozinke:</label>
         <Input
           type="password"
+          label="Potvrda lozinke:"
           placeholder="Ponovo unesite Vašu lozinku"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
           error={password.length < 8 && password ? "Lozinka je prekratka. Lozinka mora imati bar 8 karaktera." : ""}
-        /><br />
+          required
+        />
 
         <Button type="submit">Registruj se</Button>
       </form>

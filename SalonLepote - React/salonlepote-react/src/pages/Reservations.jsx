@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import stilTabele from "../styles/Table.css";
 import Button from "../components/Button";
+import Input from "../components/Input";
 
 export default function Rezervacije() {
   const [reservations, setReservations] = useState([]);
@@ -95,15 +96,14 @@ export default function Rezervacije() {
               <td>{r.makeup_artist?.name || "N/A"}</td>
               <td>{r.service?.name || "N/A"}</td>
 
-              {/* Renderuj input ili tekst u zavisnosti da li je u režimu izmene */}
               <td>
-                {editingId === r.id ? (<input type="date" name="date" value={editFormData.date} onChange={handleInputChange}/>) : (r.date)}
+                {editingId === r.id ? (<Input type="date" name="date" value={editFormData.date} onChange={handleInputChange}/>) : (r.date)}
               </td>
               <td>
-                {editingId === r.id ? (<input type="time" name="time" value={editFormData.time} onChange={handleInputChange} />) : (r.time)}
+                {editingId === r.id ? (<Input type="time" name="time" value={editFormData.time} onChange={handleInputChange} />) : (r.time)}
               </td>
               <td>
-                {editingId === r.id ? (<select name="status" value={editFormData.status} onChange={handleInputChange} >
+                {editingId === r.id ? (<select name="status" value={editFormData.status} onChange={handleInputChange} style={{ padding: '6px 10px',fontSize: '16px',borderRadius: '5px'}} >
                     <option value="confirmed">confirmed</option>
                     <option value="cancelled">cancelled</option>
                     <option value="pending">pending</option>

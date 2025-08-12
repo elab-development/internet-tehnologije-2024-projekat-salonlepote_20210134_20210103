@@ -1,13 +1,17 @@
 .input-wrapper {
+    display: flex;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }
 
 .input-label {
+  display: inline-flex;       
+  align-items: center;       
+  gap: 4px;
   font-size: 16px;
   margin-bottom: 8px;
-  color: #333;
+  color: #5a009e;
   font-weight: 500;
 }
 
@@ -29,4 +33,13 @@
   color: red;
   font-size: 14px;
   margin-top: 6px;
+}
+
+.labelRequired {
+  color: red;
+  margin-left: 4px; /* razmak između teksta i zvezdice */
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 1;
+  vertical-align: middle;
 }

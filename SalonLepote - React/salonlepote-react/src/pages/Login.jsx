@@ -53,7 +53,7 @@ function Login() {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="Unesite vaš email"
+        placeholder="Unesite Vaš email"
         error={!validateEmail(email) && email ? "Neispravan email format" : ""}
         required
       />

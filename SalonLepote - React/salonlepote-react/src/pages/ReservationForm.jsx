@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import "../styles/ReservationForm.css";
 import {useAuth} from "../hooks/AuthContext";
+import Input from "../components/Input";
 
 const ReservationForm = () => {
   const { id } = useParams(); // Ako postoji, znači da menjamo
@@ -35,7 +36,6 @@ const ReservationForm = () => {
       });
   }, []);
 
-  // Ako je edit mode — učitavamo postojeće podatke
   useEffect(() => {
     if (id) {
       axios
@@ -54,7 +54,6 @@ const ReservationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validacija unosa
     if (!selectedService || !selectedArtist || !date || !time) {
       alert("Molimo popunite sva polja");
       return;
@@ -110,11 +109,8 @@ const ReservationForm = () => {
         ))}
       </select>
 
-      <label>Datum:</label>
-      <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-
-      <label>Vreme:</label>
-      <input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+      <Input type="date" label="Datum" value={date} onChange={(e) => setDate(e.target.value)} />
+      <Input type="time" label="Vreme:" value={time} onChange={(e) => setTime(e.target.value)} />
 
       <button type="submit">{id ? "Sačuvaj izmene" : "Rezerviši"}</button>
     </form>

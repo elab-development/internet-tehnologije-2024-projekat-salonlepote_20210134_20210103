@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import stilTabele from "../styles/Table.css";
 import Button from "../components/Button";
+import Input from "../components/Input";
 
 export default function Korisnici() {
   const [users, setUsers] = useState([]);
- const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({});
 
 
@@ -91,7 +92,7 @@ export default function Korisnici() {
               <td>{u.id}</td>
               <td>
                 {editingId === u.id ? (
-                  <input
+                  <Input
                     name="name"
                     value={editFormData.name}
                     onChange={handleInputChange}
@@ -102,7 +103,7 @@ export default function Korisnici() {
               </td>
               <td>
                 {editingId === u.id ? (
-                  <input
+                  <Input
                     type="email"
                     name="email"
                     value={editFormData.email}
@@ -117,7 +118,7 @@ export default function Korisnici() {
               <td>{u.updated_at}</td>
               <td>
                 {editingId === u.id ? (
-                  <select name="role" value={editFormData.role} onChange={handleInputChange}>
+                  <select name="role" value={editFormData.role} onChange={handleInputChange} style={{ padding: '6px 10px',fontSize: '16px',borderRadius: '5px'}}>
                     <option value="client">client</option>
                     <option value="makeup_artist">makeup_artist</option>
                     <option value="admin">admin</option>

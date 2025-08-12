@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import Input from "../components/Input";
 
 function ResetPassword() {
   const [email, setEmail] = useState("");
@@ -27,36 +28,37 @@ function ResetPassword() {
     <div>
       <form onSubmit={handleSubmit}>
         <h2>Reset lozinke</h2>
-        <label>Email:</label>
-        <input
+        
+        <Input
           type="email"
+          label="Email:"
           placeholder="Unesite Vaš email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
 
-        <label>Nova lozinka:</label>
         <input
           type="password"
+          label="Nova lozinka:"
           placeholder="Unesite Vašu novu lozinku"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
-        <label>Potvrdi lozinku:</label>
         <input
           type="password"
+          label= "Potvrdi lozinku:"
           placeholder="Unesite ponovo novu lozinku"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
 
-        <label>Token:</label>
         <input
           type="text"
+          label="Token:"
           placeholder="Unesite token iz mejla"
           value={token}
           onChange={(e) => setToken(e.target.value)}

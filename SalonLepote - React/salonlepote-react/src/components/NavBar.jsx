@@ -26,27 +26,23 @@ function NavBar() {
         <ul className="navbar-menu">
           <li><Link to="/">Početna</Link></li>
           <li><Link to="/galerija">Galerija</Link></li>
-           <li><Link to="/treatments">Tretmani</Link></li>
+          <li><Link to="/treatments">Tretmani</Link></li>
           <li><Link to="/makeup-artists">Šminkeri</Link></li>
           <li><Link to="/reservations/new">Rezerviši</Link></li>
     
 
-           {/* Admin vidi dashboard */}
           {user?.role === "admin" && (
             <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
           )}
 
-          {/* Makeup artist vidi svoje rezervacije */}
           {user?.role === "makeup_artist" && (
             <li><Link to="/my-reservations">Moje rezervacije</Link></li>
           )}
 
-          {/* Client vidi svoje rezervacije */}
           { user?.role === "client" && (
             <li><Link to="/my-reservations">Moje rezervacije</Link></li>
           )}
 
-          {/* Login / Logout dugme */}
           {isLoggedIn ? (
             <>
               <li style={{ fontWeight: "bold" }}>{user?.name} ({user?.role})</li>

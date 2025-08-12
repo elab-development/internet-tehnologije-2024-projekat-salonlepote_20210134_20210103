@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import styles from '../styles/Input.css';
+import '../styles/Input.css';
+
 
 function Input({ id, label, type = "text", value, onChange, placeholder, error, required = false }) {
   const [focused, setFocused] = useState(false);
@@ -7,7 +8,7 @@ function Input({ id, label, type = "text", value, onChange, placeholder, error, 
   return (
     <div className="input-wrapper">
       <label htmlFor={id} className="input-label">
-        {label} {required && <span className={styles.labelRequired}>*</span>}
+        {label} {required && <span className="labelRequired">*</span>}
       </label>
       <input
         id={id}
